@@ -1,12 +1,16 @@
 {
   "name": "notes-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "The Complete Node.js Developer Course on uDemy",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Michael Mamuric",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/michaelmamuric/NodeJS_OnlineCourse.git"
+  },
   "license": "ISC",
   "dependencies": {
     "chalk": "^4.0.0",
