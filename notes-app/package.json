@@ -8,8 +8,8 @@
   },
   "author": "Michael Mamuric",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/michaelmamuric/NodeJS_OnlineCourse.git"
+    "type": "git",
+    "url": "https://github.com/michaelmamuric/NodeJS_OnlineCourse.git"
   },
   "license": "ISC",
   "dependencies": {
