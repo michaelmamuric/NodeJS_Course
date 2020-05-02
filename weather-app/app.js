@@ -9,16 +9,16 @@ if(!inputLocation) {
     console.log('Please provide location')
 }
 else {
-    geocode(inputLocation, (error, data) => {
+    geocode(inputLocation, (error, {latitude, longitude, fullPlaceName} = {}) => {
         if(error) {
             return console.log(error);
         }
 
-        forecast(data.latitude, data.longitude, (error, forecastData) => {
+        forecast(latitude, longitude, (error, forecastData) => {
             if(error) {
                 return console.log(error)
             }
-            console.log('Weather for ' + data.fullPlaceName)
+            console.log('Weather for ' + fullPlaceName)
             console.log(forecastData.forecast_description + '. High of ' + forecastData.high_temp + 'C. Feels like ' + forecastData.feels_like_temp + 'C.')
         })
     })
