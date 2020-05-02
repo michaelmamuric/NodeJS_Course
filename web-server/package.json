@@ -1,0 +1,22 @@
+{
+  "name": "web-server",
+  "version": "1.0.0",
+  "description": "Web Server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michaelmamuric/NodeJS_OnlineCourse.git"
+  },
+  "author": "Michael Mamuric",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michaelmamuric/NodeJS_OnlineCourse/issues"
+  },
+  "homepage": "https://github.com/michaelmamuric/NodeJS_OnlineCourse#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
