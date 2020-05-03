@@ -3,11 +3,18 @@ const express = require('express')
 
 const app = express()
 
+// Path definitions for Express Configurations
 const publicDirectory = path.join(__dirname, '../public')
+const viewsPath = path.join(__dirname, '../templates')
+
+// Set static directory
 app.use(express.static(publicDirectory))
 
 // Set HBS (Handlebars) as view engine
 app.set('view engine', 'hbs')
+// Default HBS directory is a folder named views located just under the root directory
+// This allows us to have a folder with a different name
+app.set('views', viewsPath)
 
 // Set route to index.hbs when root is accessed
 app.get('', (req, res) => {
