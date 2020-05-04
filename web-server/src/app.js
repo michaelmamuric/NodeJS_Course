@@ -55,6 +55,25 @@ app.get('/weather', (req, res) => {
     })
 })
 
+// any other path that starts with /help
+app.get('/help/*', (req, res) => {
+    res.render('error', {
+        title: 'Error',
+        name: 'Michael Mamuric',
+        errorMessage: 'Help article not found'        
+    })
+})
+
+// any other path that has not been configured
+// this must be declared last
+app.get('*', (req, res) => {
+    res.render('error', {
+        title: 'Error',
+        name: 'Michael Mamuric',
+        errorMessage: 'Page not found'        
+    })
+})
+
 app.listen(3000, () => {
     console.log('Server is running')    
 })
