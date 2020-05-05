@@ -1,6 +1,8 @@
 const path = require('path')
 const express = require('express')
 const hbs = require('hbs')
+const geocode = require('./utilities/geocode')
+const forecast = require('./utilities/forecast')
 
 const app = express()
 
@@ -49,10 +51,33 @@ app.get('/help', (req, res) => {
 
 // weather
 app.get('/weather', (req, res) => {
-    res.send({
-        location: 'Calgary',
-        forecast: 'Sunny'
+    let address = req.query.address
+
+    // address query should be mandatory
+    if(!address) {
+        return res.send({
+            error: 'Please provide an address.'
+        })
+    }
+
+    geocode(address, (error, {latitude, longitude, fullPlaceName} = {}) => {
+        if(error) {
+            return res.send({error}) // same as {error: error}
+        }
+
+        forecast(latitude, longitude, (error, forecastData) => {
+            if(error)
+                return res.send({error})
+            
+            res.send({
+                forecast: forecastData,
+                location: fullPlaceName,
+                address
+            })
+        })
+
     })
+
 })
 
 // any other path that starts with /help
