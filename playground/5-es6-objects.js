@@ -38,8 +38,13 @@ console.log(rating) // will return 5, since product does not have a rating prope
     {label, stock} -> Destructured the product object passed to it to create variables called label and stock
                       Other properties of product will not be accessed
 */
-const transaction = (type, {label, stock}) => {
+const transaction = (type, {label, stock} = {}) => {
     console.log(type, label, stock)
 }
 
+// Output is as expected
 transaction('order', product)
+
+// Output will return undefined for label and stock parameters in the transaction method
+// since no product object was provided
+transaction('order')
