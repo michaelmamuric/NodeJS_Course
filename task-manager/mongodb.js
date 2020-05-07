@@ -5,10 +5,6 @@ const {MongoClient, ObjectID} = require('mongodb')
 // const MongoClient = mongodb.MongoClient
 // const ObjectID = mongodb.ObjectID
 
-const id = new ObjectID()
-// view timestamp when id object was created
-// console.log(id.getTimestamp())
-
 // Used 127.0.0.1 instead of localhost to improve performance
 const connectionURL = 'mongodb://127.0.0.1:27017' 
 const databaseName = 'task-manager'
@@ -20,54 +16,52 @@ MongoClient.connect(connectionURL, { useUnifiedTopology:true }, (error, client) 
     // This will automatically create a database named task-manager
     const db = client.db(databaseName)
 
-    // This will create a collection named users, and insert one document with two fields
-    // named firstName and lastName
-    // db.collection('users').insertOne({
-    //     _id: id, // this will use the id object created on line 8
-    //     firstName: 'Peter',
-    //     lastName: 'Peterson'
-    // }, (error, result) => {
-    //     if (error)
-    //         return console.log('Unable to insert')
+    // This will one document whose firstName value is Jen
+    // If there are more than one users whose firstName value is Jen, findOne will only
+    // return the first document
+    db.collection('users').findOne({ firstName: 'Jen' }, (error, response) => {
+        if(error)
+            return console.log('Unable to fetch')
         
-    //     // ops will return an array containing the newly inserted document, if there are no errors
-    //     console.log(result.ops)
-    // })
+        console.log(response)
+    })
 
-    // This will insert two one documents at the same time
-    // Since users was already created in the commented code above, this will just reference the existing 
-    // users collection
-    // db.collection('users').insertMany([
-    //     {
-    //         firstName: 'Jen',
-    //         lastName: 'Jenkins'
-    //     }, {
-    //         firstName: 'Anne',
-    //         lastName: 'Annerson'
-    //     }
-    // ], (error, result) => {
-    //     if(error)
-    //         return console.log('Unable to insert documents')
+    // Searching by ObjectId
+    // _id: 5eb4460684392329eca52d40 -> This will NOT work!!!
+    // _id: new ObjectID("5eb4460684392329eca52d40") -> It should be like this
+    db.collection('users').findOne({ _id: new ObjectID("5eb4460684392329eca52d40") }, (error, response) => {
+        if(error)
+            return console.log('Unable to fetch')
+        
+        console.log(response)
+    })
 
-    //     console.log(result.ops)
-    // })
+    // find allows us to search multiple documents
+    // find does NOT have a callback property, rather, it returns a cursor to the collection
+    // toArray is used to return an array of the documents matching the criteria
+    db.collection('users').find({ firstName: 'Michael'}).toArray((error, resultList) => {
+        console.log(resultList)
+    })
+
+    // count
+    db.collection('users').find({ firstName: 'Michael'}).count((error, count) => {
+        console.log('Number of documents returned: '+ count)
+    })
 
     // Challenge
-    // db.collection('tasks').insertMany([
-    //     {
-    //         description: 'Clean room',
-    //         completed: true
-    //     }, {
-    //         description: 'Study Node.js',
-    //         completed: true            
-    //     }, {
-    //         description: 'Drink coffee',
-    //         completed: false
-    //     }
-    // ], (error, result) => {
-    //     if(error)
-    //         return console.log('Unable to insert tasks')
+    // Last document in tasks collection
+    db.collection('tasks').findOne({ _id: new ObjectID("5eb45151cc62982ec0a72f9e") }, (error, response) => {
+        if(error)
+            return console.log(error)
+        
+        console.log(response)
+    })
 
-    //     console.log(result.ops)
-    // })
+    // All incomplete tasks
+    db.collection('tasks').find({ completed: false }).toArray((error, resultList) => {
+        if(error)
+            return console.log(error)
+        
+        console.log(resultList)
+    })
 })
