@@ -11,8 +11,6 @@ const publicDirectory = path.join(__dirname, '../public')
 const viewsPath = path.join(__dirname, '../templates/views')
 const partialsPath = path.join(__dirname, '../templates/partials')
 
-console.log(partialsPath)
-
 // Set static directory
 app.use(express.static(publicDirectory))
 

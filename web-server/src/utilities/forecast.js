@@ -16,7 +16,7 @@ const forecast = (latitude, longitude, callback) => {
                         forecast_description: body.current.weather_descriptions[0],
                         high_temp: body.current.temperature,
                         feels_like_temp: body.current.feelslike,
-                        forecast_text: body.current.weather_descriptions[0] + '. High of ' + body.current.temperature + 'C. Feels like ' + body.current.feelslike + 'C.'
+                        forecast_text: body.current.weather_descriptions[0] + '. Current temperature is ' + body.current.temperature + 'C. Feels like ' + body.current.feelslike + 'C.'
                     })
                 }    
             }
