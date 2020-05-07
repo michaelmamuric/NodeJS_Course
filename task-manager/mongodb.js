@@ -16,36 +16,21 @@ MongoClient.connect(connectionURL, { useUnifiedTopology:true }, (error, client) 
     // This will automatically create a database named task-manager
     const db = client.db(databaseName)
 
-    // Update a document
-    // https://docs.mongodb.com/manual/reference/method/db.collection.updateOne/
-    // First argument: filter
-    // Second argument: value to be changed 
-    // If no callback is provided, it will return a Promise object
-    db.collection('users').updateOne({  
-        _id: new ObjectID("5eb44d799f5ab940640dbce3")
-    }, {
-        $set: {
-            firstName: 'Thomas'
-        }
+    // deleteMany
+    db.collection('users').deleteMany({
+        firstName: 'Michael'
     }).then((result) => {
-        console.log(result)
+        console.log(result.deletedCount)
     }).catch((error) => {
         console.log(error)
     })
 
-    // Challenge
-    db.collection('tasks').updateMany({
-        completed: false
-    }, 
-        {
-            $set: {
-                completed: true
-            }
-        }
-    ).then((result) => {
-        console.log(result)
+    // deleteOne
+    db.collection('tasks').deleteOne({
+        description: 'Clean room'
+    }).then((result) => {
+        console.log(result.deletedCount)
     }).catch((error) => {
         console.log(error)
     })
-
 })
