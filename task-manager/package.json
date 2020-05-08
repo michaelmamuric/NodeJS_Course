@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/michaelmamuric/NodeJS_Course#readme",
   "dependencies": {
-    "mongodb": "^3.5.7"
+    "mongodb": "^3.5.7",
+    "mongoose": "^5.9.12"
   }
 }
