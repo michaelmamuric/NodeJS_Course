@@ -1,17 +1,25 @@
-// resolve is called when processing was successful
-// reject is called when processing has failed
-const doWorkPromise = new Promise((resolve, reject) => {
-    setTimeout(() => {
-        reject('Processing has failed')
-        //resolve([1, 2, 3])
-    }, 2000)
-})
+const add = (x, y) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            let sum = x + y
+            resolve(sum)
+        }, 2000)
+    })
+}
 
-// then will called when processing was successful
-// we can chain catch that will be called when processing has failed
-// similar to Java's try..catch
-doWorkPromise.then((result) => {
-    console.log('Success', result)        
+// add(1, a1).then((sum) => {
+//     console.log(sum)
+// }).catch((error) => {
+//     console.log(error)
+// })
+
+// Promise chaining example
+add(1, 2).then((sum) => {
+    console.log(sum)
+    // Return the result of the first promise
+    return add(sum, 3)
+}).then((sum2) => {
+    console.log(sum2)
 }).catch((error) => {
-    console.log('Error', error)
+    console.log(error)
 })
