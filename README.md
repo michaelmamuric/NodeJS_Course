@@ -7,3 +7,9 @@ SQL vs NoSQL
 * SQL Table = NoSQL Collection
 * SQL Row = NoSQL Document
 * SQL Column = NoSQL Field
+
+REST API and CRUD Operations
+* POST - Create
+* GET - Read
+* PATCH - Update
+* DELETE -Delete

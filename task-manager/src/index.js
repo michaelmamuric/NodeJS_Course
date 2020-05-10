@@ -8,6 +8,12 @@ const port = process.env.PORT || 3000
 
 app.use(express.json())
 
+// REST API
+// POST - Create
+// GET - Read
+// PATCH - Update
+//
+
 // Create Users
 app.post('/users', async(req, res) => {
     const user = new User(req.body)
@@ -84,6 +90,52 @@ app.get('/tasks/:id', async(req, res) => {
         res.status(500).send(error)
     }
 })
+
+// Update individual user
+app.patch('/users/:id', async(req, res) => {
+    // Error handling -> ensure only valid attributes can be changed for user
+    const updates = Object.keys(req.body)
+    const allowedUpdates = ['firstName', 'lastName', 'email', 'password']
+    const isValid = updates.every((update) => allowedUpdates.includes(update))
+
+    if(!isValid)
+        return res.status(400).send({error: 'Invalid update!'})
+
+    try {
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+
+        if(!user) 
+            return res.status(404).send()
+        
+        res.send(user)
+    } catch(error) {
+        res.status(400).send(error)
+    }
+})
+
+// Update individual task
+app.patch('/tasks/:id', async(req, res) => {
+    // Error handling -> ensure only valid attributes can be changed for task
+    const updates = Object.keys(req.body)
+    const allowedUpdates = ['description']
+    const isValid = updates.every((update) => allowedUpdates.includes(update))
+
+    if(!isValid)
+        return res.status(400).send({error: 'Invalid update!'})
+
+    try {
+        const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+
+        if(!task) 
+            return res.status(404).send()
+        
+        res.send(task)
+    } catch(error) {
+        res.status(400).send(error)
+    }    
+})
+
+
 
 app.listen(port, () => {
     console.log('Server is running')
