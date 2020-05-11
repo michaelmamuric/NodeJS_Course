@@ -53,7 +53,19 @@ router.patch('/tasks/:id', async(req, res) => {
         return res.status(400).send({error: 'Invalid update!'})
 
     try {
-        const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+        // In case a middleware in task model is defined, this will ensure that it will be called
+        // before the task is saved (see user.js)
+        const task = Task.findById(req.params.id)
+
+        // Loop thru the properties of the task that are being updated
+        updates.forEach((property) => {
+            user[property] = req.body[property]
+        })
+
+        await task.save()
+
+        // Original code -> altered
+        // const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
 
         if(!task) 
             return res.status(404).send()

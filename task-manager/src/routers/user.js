@@ -51,7 +51,18 @@ router.patch('/users/:id', async(req, res) => {
         return res.status(400).send({error: 'Invalid update!'})
 
     try {
-        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+        // Ensure validator defined in user model is called
+        const user = await User.findById(req.params.id)
+
+        // Loop thru the properties of the user that are being updated
+        updates.forEach((property) => {
+            user[property] = req.body[property]
+        })
+
+        await user.save()
+
+        // Original code below -> it bypasses the validator somehow?
+        // const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
 
         if(!user) 
             return res.status(404).send()

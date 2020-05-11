@@ -1,7 +1,9 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
+const bcrypt = require('bcryptjs')
 
-const User = mongoose.model('User', {
+// Create Schema first before creating User Model
+const userSchema = new mongoose.Schema({
     firstName: {
         type: String,
         required: true,
@@ -40,5 +42,21 @@ const User = mongoose.model('User', {
         }
     }
 })
+
+// Set middleware
+// pre() - run middleware before object is saved
+// We need to use a regular function, not an arrow function since we need the "this" binding 
+userSchema.pre('save', async function(next) {
+    const user = this
+
+    // Ensure that the password is being attempted to be replaced, so we don't do hashing if it's not needed
+    if(user.isModified('password'))
+        user.password = await bcrypt.hash(user.password, 8)
+
+    next()
+})
+
+// Pass userSchema above as second argument to model method
+const User = mongoose.model('User', userSchema)
 
 module.exports = User
