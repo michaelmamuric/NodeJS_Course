@@ -8,6 +8,15 @@ const taskRouter = require('./routers/task')
 const app = express()
 const port = process.env.PORT || 3000
 
+// setup to use middleware to run after new request, and before the route handling is performed
+// app.use((req, res, next) => {
+//     if(req.method === 'GET') {
+//         res.status(400).send('GET requests disabled')
+//     } else {
+//         next()
+//     }
+// })
+
 app.use(express.json())
 // Use newly-registered router file - routers/user contains all user-related routes
 app.use(userRouter)

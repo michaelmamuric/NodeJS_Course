@@ -1,5 +1,6 @@
 const express = require('express')
 const User = require('../models/user')
+const auth = require('../middleware/auth')
 const router = new express.Router()
 
 // Create Users
@@ -28,13 +29,10 @@ router.post('/users/login', async(req, res) => {
 })
 
 // Get All Users
-router.get('/users', async(req, res) => {
-    try {
-        const users = await User.find({})
-        res.send(users)
-    } catch(error) {
-        res.status(500).send(error)
-    }
+// auth call is added -> ensure that only authenticated users can access page
+// similar to JSP filters 
+router.get('/users/me', auth, async(req, res) => {
+    res.send(req.user)
 })
 
 // Get User by its ObjectID
