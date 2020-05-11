@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
+        unique: true,
         required: true,
         trim: true,
         lowercase: true,
@@ -43,7 +44,24 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-// Set middleware
+// findByEmailAndPassword - static function that checks if user credentials are correct
+userSchema.statics.findByEmailAndPassword = async (email, password) => {
+    // First, find user by email
+    const user = await User.findOne({ email })
+    
+    if(!user)
+        throw new Error('Unable to login')
+
+    // Next, check if user's encrypted password matches the plain text password he/she provided
+    const isMatch = await bcrypt.compare(password, user.password)
+    
+    if(!isMatch)
+        throw new Error('Unable to login')
+
+    return user
+}
+
+// Set middleware to hash password
 // pre() - run middleware before object is saved
 // We need to use a regular function, not an arrow function since we need the "this" binding 
 userSchema.pre('save', async function(next) {
