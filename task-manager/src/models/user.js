@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 // Create Schema first before creating User Model
 const userSchema = new mongoose.Schema({
@@ -41,8 +42,28 @@ const userSchema = new mongoose.Schema({
             if(value.length < 7 || value.includes("password"))
                 throw new Error('Password does not meet requirements')
         }
-    }
+    },
+    tokens: [{
+        token: {
+            type: String,
+            required: true
+        }
+    }]
 })
+
+// generateAuthToken
+// it is defined as a regular method instead of a static method since it needs to be accessible 
+// from a particular instance of user
+userSchema.methods.generateAuthToken = async function() {
+    const user = this
+    // generated tokenfor user
+    const token = jwt.sign({_id: user._id.toString() }, 'MySecretSign')
+    // add generated token to list of tokens for user
+    user.tokens = user.tokens.concat({token})
+    // save, to ensure token is added
+    await user.save()
+    return token
+}
 
 // findByEmailAndPassword - static function that checks if user credentials are correct
 userSchema.statics.findByEmailAndPassword = async (email, password) => {
