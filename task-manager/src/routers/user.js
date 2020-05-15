@@ -28,6 +28,33 @@ router.post('/users/login', async(req, res) => {
     }
 })
 
+// Logout from current device
+router.post('/users/logout', auth, async(req, res) => {
+    try {
+        // Filter tokens that are not equal to the current token
+        // so that the current token used will be deleted
+        req.user.tokens = req.user.tokens.filter((tokenList) => {
+            return tokenList.token !== req.token
+        })
+        await req.user.save()
+        res.send()
+    } catch(error) {
+        res.status(500).send()
+    }
+})
+
+// Logout from all devices
+router.post('/users/logoutAll', auth, async(req, res) => {
+    try {
+        // Empty user tokens list
+        req.user.tokens = []
+        await req.user.save()
+        res.send()
+    } catch(error) {
+        res.status(500).send()
+    }
+})
+
 // Get All Users
 // auth call is added -> ensure that only authenticated users can access page
 // similar to JSP filters 
