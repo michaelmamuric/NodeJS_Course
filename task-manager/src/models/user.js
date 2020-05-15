@@ -65,6 +65,21 @@ userSchema.methods.generateAuthToken = async function() {
     return token
 }
 
+// toJSON
+// When a send request is triggered, JSON.stringify is being called behind the scenes
+// toJSON parses this string to convert it to a JSON object
+// this allows us to send a back a new JSON object with some attributes removed
+userSchema.methods.toJSON = function() {
+    const user = this
+    const userObject = user.toObject()
+
+    // delete password and tokens so that they will not be sent back
+    delete userObject.password
+    delete userObject.tokens
+
+    return userObject
+}
+
 // findByEmailAndPassword - static function that checks if user credentials are correct
 userSchema.statics.findByEmailAndPassword = async (email, password) => {
     // First, find user by email
