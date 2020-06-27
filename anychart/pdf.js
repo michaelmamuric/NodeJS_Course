@@ -16,26 +16,44 @@ const { CanvasRenderService } = require('chartjs-node-canvas')
 // }
 
 function drawChartUsingChartJS() {
-    const width = 480; 
-    const height = 200; 
-    const canvasRenderService = new CanvasRenderService(width, height, (ChartJS) => { });
+    const width = 1280; 
+    const height = 720; 
+    const canvasRenderService = new CanvasRenderService(width, height, (ChartJS) => {
+        ChartJS.defaults.global.defaultFontSize = 24;
+        ChartJS.defaults.global.defaultFontColor = 'black';
+        ChartJS.defaults.global.defaultFontStyle = 'bold';
+    });
     const configuration = {
         type: 'bar',
         data: {
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             datasets: [{
-                    label: 'Estimated Energy Usage: Previous 12 months',
-                    data: [0,0,178,236,265,206,306,286,345,265,184,249]
+                label: 'Estimated Energy Usage: Previous 12 months',
+                backgroundColor: '#06974f',
+                data: [0,0,178,236,265,206,306,286,345,265,184,249],
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'kW'
+                  }
                 }]
             }
-        };
+        }
+    };
     return canvasRenderService.renderToBuffer(configuration);
 }
 
 async function generatePDF(req, res) {
-   const doc = new PDFDocument
+   const doc = new PDFDocument({layout: 'landscape'})
    doc.pipe(res)
-   doc.image(await drawChartUsingChartJS())
+    doc.image(await drawChartUsingChartJS(), {
+        width:640,
+        height:400
+    })
    doc.end()
 }
 
